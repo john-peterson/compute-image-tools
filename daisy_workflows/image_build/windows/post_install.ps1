@@ -543,7 +543,7 @@ function Install-Packages {
   Run-Command 'C:\ProgramData\GooGet\googet.exe' -root 'C:\ProgramData\GooGet' -noconfirm install certgen
   Run-Command 'C:\ProgramData\GooGet\googet.exe' -root 'C:\ProgramData\GooGet' -noconfirm install google-compute-engine-driver-gvnic
   Run-Command 'C:\ProgramData\GooGet\googet.exe' -root 'C:\ProgramData\GooGet' -noconfirm install google-compute-engine-driver-vioscsi
-  Run-Command 'C:\ProgramData\GooGet\googet.exe' -root 'C:\ProgramData\GooGet' -noconfirm install google-compute-engine-driver-netkvm
+  <#Run-Command 'C:\ProgramData\GooGet\googet.exe' -root 'C:\ProgramData\GooGet' -noconfirm install google-compute-engine-driver-netkvm#>
   Run-Command 'C:\ProgramData\GooGet\googet.exe' -root 'C:\ProgramData\GooGet' -noconfirm install google-compute-engine-driver-pvpanic
   Run-Command 'C:\ProgramData\GooGet\googet.exe' -root 'C:\ProgramData\GooGet' -noconfirm install google-compute-engine-driver-balloon
   Run-Command 'C:\ProgramData\GooGet\googet.exe' -root 'C:\ProgramData\GooGet' -noconfirm install google-compute-engine-diagnostics
@@ -628,10 +628,10 @@ function Generate-NativeImage {
 }
 
 function Enable-WinRM {
-  if ($pn -like '*Enterprise') {
+  #if ($pn -like '*Enterprise') {
     Write-Host 'Windows Client detected, enabling WinRM (including on Public networks).'
     & winrm quickconfig -quiet -force
-  }
+  #}
 }
 
 function Install-PowerShell {
@@ -692,21 +692,21 @@ try {
 
   Install-PowerShell
 
-  if ($script:wu_server_url.StartsWith('http') -and $script:wu_server_port -notlike '0') {
+  <#if ($script:wu_server_url.StartsWith('http') -and $script:wu_server_port -notlike '0') {
     Set-WindowsUpdateServer
-  }
-  if (Install-WindowsUpdates) {
+  }#>
+  <#if (Install-WindowsUpdates) {
     Write-Host 'Install-WindowsUpdates installed updates, rebooting.'
     shutdown /r /t 00
     exit
-  }
-  if (Reboot-Required) {
+  }#>
+  <#if (Reboot-Required) {
     Write-Host 'Reboot-Required returned true, rebooting.'
     shutdown /r /t 00
     exit
-  }
+  }#>
 
-  Reset-WindowsUpdateServer
+  #Reset-WindowsUpdateServer
   Change-InstanceProperties
   Configure-Network
   Configure-Power
@@ -740,7 +740,7 @@ try {
     New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\StreamProvider' -Name LastFullPayloadTime -Value 0 -PropertyType DWord -Force
   }
 
-  Optimize-Image
+  #Optimize-Image
 
   Write-Host 'Launching sysprep.'
   & "$script:gce_install_dir\sysprep\gcesysprep.bat"
